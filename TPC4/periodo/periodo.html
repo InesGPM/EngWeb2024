@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações do Período</title>
+    <!-- Adiciona o estilo da W3C -->
+    <style>
+        body {
+            background-color: #add8e6; /* Fundo azul claro */
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff; /* Fundo branco */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #007bff; /* Cor azul para o título */
+            text-align: center;
+            font-size: 36px; /* Tamanho maior para o título */
+        }
+        p {
+            margin-bottom: 10px;
+        }.saida,
+        .botao-rosa {
+            display: inline-block; /* Exibe os botões em linha */
+            background-color: pink; /* Cor rosa para o botão */
+            color: black;
+            border: none;
+            border-radius: 25px; /* Torna o botão redondo */
+            padding: 10px 20px; /* Adapte o preenchimento conforme necessário */
+            cursor: pointer;
+            outline: none; /* Remove a borda de foco */
+            transition: background-color 0.3s ease-in-out; /* Adiciona transição de cor */
+            margin-right: 10px; /* Adiciona margem à direita */
+        }
+
+        .saida {
+            background-color: #0065d1; /* Cor azul para o botão de saída */
+            color: #ffffff; /* Cor do texto do botão de saída branco */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1><span id="nome"></span></h1>
+    <p><strong>Descrição:</strong> <span id="descricao"></span></p>
+    <!-- Outras informações do período aqui -->
+    <a href="http://localhost:7777/periodos" class="saida">Voltar ao Menu Periodo</a>
+</div>
+
+<script>
+    // Extrai o ID da URL
+    const urlParams = window.location.pathname.split("/");
+    const id = urlParams[urlParams.length - 1];
+
+    // Faz uma solicitação ao servidor para obter as informações do período com base no ID
+    fetch(`http://localhost:3000/periodos/${id}`)
+        .then(response => response.json())
+        .then(periodo => {
+            document.getElementById('nome').textContent = periodo.nome;
+            document.getElementById('descricao').textContent = periodo.descricao;
+            // Atualiza o título da página
+            document.title = periodo.nome;
+        })
+        .catch(error => {
+            console.error('Erro ao obter informações do período:', error);
+        });
+</script>
+
+</body>
+</html>

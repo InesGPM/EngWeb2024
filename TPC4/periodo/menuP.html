@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Períodos</title>
+    <!-- Adiciona o estilo da W3C -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+        body {
+            background-color: #add8e6;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff; /* Fundo branco */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #009688;
+            margin-top: 30px; /* Adiciona espaço entre o título e os links */
+        }
+        .w3-ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .w3-hoverable li {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s;
+        }
+        .w3-hoverable li:hover {
+            background-color: #f9f9f9;
+        }
+        .w3-hoverable a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            text-align: center;
+            display: block;
+            background-color: #d3f2c3; /* Cor verde clara para os links */
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .w3-hoverable a:hover {
+            background-color: #a9dfbf; /* Cor dos links ao passar o mouse */
+        }
+        .saida,
+        .botao-rosa {
+            display: inline-block; /* Exibe os botões em linha */
+            background-color: pink; /* Cor rosa para o botão */
+            color: black;
+            border: none;
+            border-radius: 25px; /* Torna o botão redondo */
+            padding: 10px 20px; /* Adapte o preenchimento conforme necessário */
+            cursor: pointer;
+            outline: none; /* Remove a borda de foco */
+            transition: background-color 0.3s ease-in-out; /* Adiciona transição de cor */
+            margin-right: 10px; /* Adiciona margem à direita */
+        }
+
+        .saida {
+            background-color: #0065d1; /* Cor azul para o botão de saída */
+            color: #ffffff; /* Cor do texto do botão de saída branco */
+        }
+
+        .botao-rosa:hover {
+            background-color: lightpink; /* Altera a cor de fundo ao passar o mouse */
+        }
+    </style>
+</head>
+<body class="w3-container">
+
+<div class="container">
+    <h1 class="w3-center">Lista de Períodos</h1>
+    <ul class="w3-ul w3-hoverable" id="periodos-list">
+        <!-- Lista de períodos será preenchida dinamicamente aqui -->
+    </ul>
+    <p class="w3-margin-top"><a href="http://localhost:7777" class="saida">Voltar à Página Principal</a><button onclick="adicionarPeriodo()" class="botao-rosa">Adicionar Período</button></p>   
+</div>
+
+<script>
+    async function carregarPeriodos() {
+        try {
+            const response = await fetch('http://localhost:3000/periodos');
+            const data = await response.json();
+            console.log('Dados de períodos carregados com sucesso:', data);
+
+            const periodosList = document.getElementById('periodos-list');
+
+            data.forEach(periodo => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <a href="http://localhost:7777/${periodo.id}">${periodo.nome}</a>
+                    <div class="acoes">
+                        <button onclick="editarPeriodo('${periodo.nome}', '${periodo.id}')">Editar</button>
+                        <button onclick="apagarPeriodo('${periodo.id}')">Apagar</button>
+                    </div>
+                `;
+                periodosList.appendChild(listItem);
+            });
+        } catch (error) {
+            console.error('Erro ao carregar dados de períodos:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', carregarPeriodos);
+
+    function editarPeriodo(periodoNome, periodoId) {
+        // Redireciona para a página de edição do período
+        window.location.href = `http://localhost:7777/editarP?id=${periodoId}&nome=${periodoNome}`;
+    }
+
+    function apagarPeriodo(periodoId) {
+        // Implemente a lógica para confirmar a exclusão e enviar uma requisição de exclusão
+        window.location.href = `http://localhost:7777/apagarP?id=${periodoId}`;
+    }
+
+    function adicionarPeriodo() {
+        // Redireciona para a página de adição de novo período
+        window.location.href = 'http://localhost:7777/adicionarP';
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Informações</title>
+    <style>
+        body {
+            background-color: #add8e6; /* Fundo azul claro */
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff; /* Fundo branco */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #007bff; /* Cor azul para o título */
+            text-align: center;
+            font-size: 36px; /* Tamanho maior para o título */
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .saida,
+        .botao-rosa {
+            display: inline-block; /* Exibe os botões em linha */
+            background-color: pink; /* Cor rosa para o botão */
+            color: black;
+            border: none;
+            border-radius: 25px; /* Torna o botão redondo */
+            padding: 10px 20px; /* Adapte o preenchimento conforme necessário */
+            cursor: pointer;
+            outline: none; /* Remove a borda de foco */
+            transition: background-color 0.3s ease-in-out; /* Adiciona transição de cor */
+            margin-right: 10px; /* Adiciona margem à direita */
+        }
+
+        .saida {
+            background-color: #0065d1; /* Cor azul para o botão de saída */
+            color: #ffffff; /* Cor do texto do botão de saída branco */
+        }
+
+        .botao-rosa:hover {
+            background-color: lightpink; /* Altera a cor de fundo ao passar o mouse */
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+
+<h1 id="titulo-id">Editar Informações ( )</h1>
+
+<form action="/editarp" method="POST">
+    <label for="id">ID:</label>
+    <input type="text" id="id" name="id" readonly>
+    <br>
+
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" placeholder="Nome">
+    <br>
+
+    <label for="descricao">Descrição:</label>
+    <textarea id="descricao" name="descricao" required></textarea>
+    <br>
+
+    <p class="w3-margin-top"><a href="http://localhost:7777/periodos" class="saida">Voltar ao Menu Periodo</a><button type="submit" class="botao-rosa">Salvar Edição</button></p>
+</form>
+
+</div>
+<script>
+    // Extrai o ID da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    document.getElementById('id').value = id;
+    // Preenche a caixa de texto do ID com o valor do parâmetro 'id'
+
+    // Extrai o nome do compositor da URL
+    const nomeCompositor = urlParams.get('nome');
+    document.getElementById('nome').value = nomeCompositor;
+
+    // Atualiza o texto do título com o nome do compositor
+    document.getElementById('titulo-id').innerText = 'Editar Informações (' + nomeCompositor + ')';
+</script>
+
+</body>
+</html>

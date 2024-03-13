@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Compositor</title>
+    <style>
+        body {
+            background-color: #add8e6; /* Fundo azul claro */
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff; /* Fundo branco */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #007bff; /* Cor azul para o título */
+            text-align: center;
+            font-size: 36px; /* Tamanho maior para o título */
+        }
+        p {
+            margin-bottom: 10px;
+        }.saida,
+        .botao-rosa {
+            display: inline-block; /* Exibe os botões em linha */
+            background-color: pink; /* Cor rosa para o botão */
+            color: black;
+            border: none;
+            border-radius: 25px; /* Torna o botão redondo */
+            padding: 10px 20px; /* Adapte o preenchimento conforme necessário */
+            cursor: pointer;
+            outline: none; /* Remove a borda de foco */
+            transition: background-color 0.3s ease-in-out; /* Adiciona transição de cor */
+            margin-right: 10px; /* Adiciona margem à direita */
+        }
+
+        .saida {
+            background-color: #0065d1; /* Cor azul para o botão de saída */
+            color: #ffffff; /* Cor do texto do botão de saída branco */
+        }
+
+        .botao-rosa:hover {
+            background-color: lightpink; /* Altera a cor de fundo ao passar o mouse */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h1>Adicionar Compositor</h1>
+    
+    <form id="compositorForm" action="/compositores" method="post">
+        <!-- Adiciona um campo oculto para enviar o ID -->
+        <input type="hidden" id="id" name="id" value="">
+        
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+        <br>
+        
+        <label for="bio">Biografia:</label>
+        <textarea id="bio" name="bio" required></textarea>
+        <br>
+        
+        <label for="dataNasc">Data de Nascimento:</label>
+        <input type="date" id="dataNasc" name="dataNasc" required>
+        <br>
+
+        <label for="dataObito">Data de Óbito:</label>
+        <input type="date" id="dataObito" name="dataObito">
+        <br>
+
+        <label for="periodo">Período:</label>
+        <input type="text" id="periodo" name="periodo" required>
+        <br>
+        
+        <p class="w3-margin-top"><a href="http://localhost:7777/compositores" class="saida">Voltar ao Menu Compositores</a> <input type="submit" value="Adicionar Compositor" class="botao-rosa"></p>
+
+    </form>
+    </div>
+    <script>
+        async function generateUniqueId() {
+            const response = await fetch('http://localhost:3000/compositores');
+            const compositores = await response.json();
+            let maxId = 0;
+            for (const compositor of compositores) {
+                const idNumber = parseInt(compositor.id.substring(1)); // Extrai o número do ID (removendo o "C" no início)
+                if (idNumber > maxId) {
+                    maxId = idNumber;
+                }
+            }
+            return maxId + 1;
+        }
+
+        document.getElementById("compositorForm").addEventListener("submit", async function(event) {
+            event.preventDefault(); // Evita o envio padrão do formulário
+
+            // Gera um ID único
+            var uniqueId = await generateUniqueId();
+
+            // Define o valor do campo de ID com o ID único gerado
+            document.getElementById("id").value = "C" + uniqueId; // Adiciona "C" no início para formar o ID completo
+
+            // Envia o formulário
+            this.submit();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações do Compositor</title>
+    <!-- Adiciona o estilo da W3C -->
+    <style>
+        body {
+            background-color: #add8e6; /* Fundo azul claro */
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff; /* Fundo branco */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #007bff; /* Cor azul para o título */
+            text-align: center;
+            font-size: 36px; /* Tamanho maior para o título */
+        }
+        p {
+            margin-bottom: 10px;
+        }.saida,
+        .botao-rosa {
+            display: inline-block; /* Exibe os botões em linha */
+            background-color: pink; /* Cor rosa para o botão */
+            color: black;
+            border: none;
+            border-radius: 25px; /* Torna o botão redondo */
+            padding: 10px 20px; /* Adapte o preenchimento conforme necessário */
+            cursor: pointer;
+            outline: none; /* Remove a borda de foco */
+            transition: background-color 0.3s ease-in-out; /* Adiciona transição de cor */
+            margin-right: 10px; /* Adiciona margem à direita */
+        }
+
+        .saida {
+            background-color: #0065d1; /* Cor azul para o botão de saída */
+            color: #ffffff; /* Cor do texto do botão de saída branco */
+        }
+
+        .botao-rosa:hover {
+            background-color: lightpink; /* Altera a cor de fundo ao passar o mouse */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span id="nome"></span></h1>
+        <form id="deleteForm">
+            <!-- Campo de entrada oculto para armazenar o ID -->
+            <input type="hidden" id="id" name="id">
+            <br>
+            <a href="http://localhost:7777/compositores" class="saida">Voltar ao Menu Compositores</a> <button type="button" onclick="deleteComposer()" class="botao-rosa">Apagar Compositor</button>
+        </form>
+        
+    </div>
+<script>
+    // Extrai o ID da URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    document.getElementById('id').value = id;
+    fetch(`http://localhost:3000/compositores/${id}`)
+        .then(response => response.json())
+        .then(compositor => {
+            document.getElementById('nome').textContent ='Apagar (' + compositor.nome + ')';
+            // Atualiza o título da página
+            document.title = compositor.nome;
+        })
+        .catch(error => {
+            console.error('Erro ao obter informações do compositor:', error);
+        });
+
+    function deleteComposer() {
+        const id = document.getElementById('id').value;
+        fetch(`http://localhost:3000/compositores/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = 'http://localhost:7777/compositores';
+            } else {
+                console.error('Erro ao excluir compositor');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao excluir compositor:', error);
+        });
+    }
+</script>
+
+</body>
+</html>
