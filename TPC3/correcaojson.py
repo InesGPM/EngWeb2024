@@ -1,0 +1,55 @@
+import json
+
+# Nome do arquivo de entrada e saída
+input_file = "filmes.json"
+output_file = "filmes_corrigidos.json"
+
+# Dicionários para mapear atores e gêneros para IDs
+atores_dict = {}
+generos_dict = {}
+
+# Lista para armazenar os objetos corrigidos
+filmes_corrigidos = []
+
+# Função para obter o ID do ator e gênero
+def get_id_or_create(mapping_dict, value):
+    if value in mapping_dict:
+        return mapping_dict[value]['id']
+    else:
+        new_id = len(mapping_dict) + 1
+        mapping_dict[value] = {"id": f"{value[:2]}{new_id:03}", "nome": value}
+        return mapping_dict[value]['id']
+
+# Abrindo o arquivo de entrada e lendo linha por linha
+with open(input_file, "r") as f:
+    for line in f:
+        # Carregando o objeto JSON de cada linha
+        filme = json.loads(line)
+        
+        # Corrigindo a estrutura do ID
+        filme['_id'] = str(filme['_id']['$oid'][-5:])
+        
+        # Mapeando atores para IDs e adicionando à lista de atores
+        cast_ids = []
+        for ator in filme['cast']:
+            ator_id = get_id_or_create(atores_dict, ator)
+            cast_ids.append(ator_id)
+        filme['cast'] = cast_ids
+        
+        # Mapeando gêneros para IDs e adicionando à lista de gêneros
+        genre_ids = []
+        if 'genres' not in filme:
+            filme['genres'] = []
+        for genero in filme['genres']:
+            genero_id = get_id_or_create(generos_dict, genero)
+            genre_ids.append(genero_id)
+        filme['genres'] = genre_ids
+        
+        # Adicionando o objeto à lista
+        filmes_corrigidos.append(filme)
+
+# Escrevendo os objetos corrigidos em um novo arquivo
+with open(output_file, "w") as f:
+    json.dump({"filmes": filmes_corrigidos, "atores": list(atores_dict.values()), "generos": list(generos_dict.values())}, f, indent=4)
+
+print("Ficheiro corrigido:", output_file)

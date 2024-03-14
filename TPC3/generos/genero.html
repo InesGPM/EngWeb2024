@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações do Gênero</title>
+    <!-- Adiciona o estilo da W3C -->
+    <style>
+        body {
+            background-color: #400000; /* Vermelho mais suave para o fundo */
+            color: #070707; /* Cor do texto branca */
+            
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #eae7e3; /* Fundo branco para o container */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra mais suave */
+        }
+        h1 {
+            color: #c00; /* Cor do título vermelha */
+            margin-top: 30px;
+            text-align: center; /* Centraliza o título */
+            font-family: "Roboto Condensed";
+        }
+        .w3-ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .w3-hoverable li {
+            padding: 12px;
+            border-bottom: 1px solid #333; /* Linha separadora mais escura */
+            transition: background-color 0.3s;
+        }
+        .w3-hoverable li:hover {
+            background-color: #555; /* Fundo mais escuro ao passar o mouse */
+        }
+        .w3-hoverable a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff; /* Cor do texto branco */
+            text-align: center;
+            display: block;
+            background-color: #000; /* Cor preta para os links */
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .w3-hoverable a:hover {
+            background-color: #333; /* Fundo mais escuro ao passar o mouse */
+        }
+        .saida {
+            display: inline-block;
+            background-color: #ff0; /* Cor de fundo amarela para o botão de saída */
+            color: #000; /* Texto preto */
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease-in-out;
+            margin-right: 10px;
+        }
+    
+        .saida:hover {
+            background-color: #cc0; /* Cor de fundo mais escura ao passar o mouse */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Filmes do Gênero: <span id="nome"></span></h1>
+    <div id="filmes-list"></div>
+    <!-- Outras informações do gênero aqui -->
+    <a href="http://localhost:7777/generos" class="saida">Voltar ao Menu de Gêneros</a>
+</div>
+
+<script>
+    // Extrai o ID do gênero da URL
+    const urlParams = window.location.pathname.split("/");
+    const id = urlParams[urlParams.length - 1];
+    console.log(id);
+
+    // Faz uma solicitação ao servidor para obter as informações do gênero com base no ID
+    fetch(`http://localhost:3000/generos/${id}`)
+        .then(response => response.json())
+        .then(genero => {
+            console.log(genero);
+            document.getElementById('nome').textContent = genero.nome;
+            document.title = genero.nome;
+            
+            // Agora, faz outra solicitação para obter a lista de filmes com base no gênero
+            return fetch(`http://localhost:3000/filmes`);
+        })
+        .then(response => response.json())
+        .then(filmes => {
+            console.log(filmes);
+            const filmesList = document.getElementById('filmes-list');
+            filmes.forEach(filme => {
+                if (filme.genres.includes(id)) {
+                    const filmeItem = document.createElement('p');
+                    filmeItem.textContent = filme.title;
+                    filmesList.appendChild(filmeItem);
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao obter informações do gênero ou dos filmes:', error);
+        });
+</script>
+
+</body>
+</html>
+
+

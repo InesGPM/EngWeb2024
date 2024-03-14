@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atores</title>
+    <!-- Adiciona o estilo da W3C -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+        body {
+            background-color: #400000; /* Vermelho mais suave para o fundo */
+            color: #fff; /* Cor do texto branca */
+            
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #eae7e3; /* Fundo branco para o container */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra mais suave */
+        }
+        h1 {
+            color: #c00; /* Cor do título vermelha */
+            margin-top: 30px;
+            text-align: center; /* Centraliza o título */
+            font-family: "Roboto Condensed";
+        }
+        .w3-ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .w3-hoverable li {
+            padding: 12px;
+            border-bottom: 1px solid #333; /* Linha separadora mais escura */
+            transition: background-color 0.3s;
+        }
+        .w3-hoverable li:hover {
+            background-color: #555; /* Fundo mais escuro ao passar o mouse */
+        }
+        .w3-hoverable a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff; /* Cor do texto branco */
+            text-align: center;
+            display: block;
+            background-color: #000; /* Cor preta para os links */
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .w3-hoverable a:hover {
+            background-color: #333; /* Fundo mais escuro ao passar o mouse */
+        }
+        .saida {
+            display: inline-block;
+            background-color: #ff0; /* Cor de fundo amarela para o botão de saída */
+            color: #000; /* Texto preto */
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease-in-out;
+            margin-right: 10px;
+        }
+    
+        .saida:hover {
+            background-color: #cc0; /* Cor de fundo mais escura ao passar o mouse */
+        }
+    </style>
+</head>
+<body class="w3-container">
+
+<div class="container">
+    <h1 class="w3-center">Lista de Atores</h1>
+    <ul class="w3-ul w3-hoverable" id="atores-list">
+        <!-- Lista de atores será preenchida dinamicamente aqui -->
+    </ul>
+    <p class="w3-margin-top"><a href="http://localhost:7777" class="saida">Voltar à Página Principal</a> </p>
+</div>
+
+<script>
+    async function carregarAtores() {
+        try {
+            const response = await fetch('http://localhost:3000/atores');
+            const data = await response.json();
+            console.log('Dados carregados com sucesso:', data);
+
+            const atoresList = document.getElementById('atores-list');
+
+            data.forEach(ator => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <a href="http://localhost:7777/atores/${ator.id}">${ator.nome}</a>
+                `;
+                atoresList.appendChild(listItem);
+            });
+        } catch (error) {
+            console.error('Erro ao carregar dados:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', carregarAtores);
+
+</script>
+
+</body>
+</html>

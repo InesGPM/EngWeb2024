@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações do Filme</title>
+    <style>
+        body {
+            background-color: #400000; /* Vermelho mais suave para o fundo */
+            color: #070707; /* Cor do texto branca */
+            
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #eae7e3; /* Fundo branco para o container */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra mais suave */
+        }
+        h1 {
+            color: #c00; /* Cor do título vermelha */
+            margin-top: 30px;
+            text-align: center; /* Centraliza o título */
+            font-family: "Roboto Condensed";
+        }
+        .w3-ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .w3-hoverable li {
+            padding: 12px;
+            border-bottom: 1px solid #333; /* Linha separadora mais escura */
+            transition: background-color 0.3s;
+        }
+        .w3-hoverable li:hover {
+            background-color: #555; /* Fundo mais escuro ao passar o mouse */
+        }
+        .w3-hoverable a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff; /* Cor do texto branco */
+            text-align: center;
+            display: block;
+            background-color: #000; /* Cor preta para os links */
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .w3-hoverable a:hover {
+            background-color: #333; /* Fundo mais escuro ao passar o mouse */
+        }
+        .saida {
+            display: inline-block;
+            background-color: #ff0; /* Cor de fundo amarela para o botão de saída */
+            color: #000; /* Texto preto */
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.3s ease-in-out;
+            margin-right: 10px;
+        }
+    
+        .saida:hover {
+            background-color: #cc0; /* Cor de fundo mais escura ao passar o mouse */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1><span id="tit"></span></h1>
+    <p><strong>Ano:</strong> <span id="ano"></span></p>
+    <p><strong>Elenco:</strong> <span id="cast"></span></p>
+    <p><strong>Gênero:</strong> <span id="genre"></span></p>
+    <!-- Outras informações do filme aqui -->
+    <a href="http://localhost:7777/filmes" class="saida">Voltar ao Menu Filmes</a>
+</div>
+
+<script>
+    async function carregarFilmes() {
+        try {
+            const com = window.location.pathname.split("/")[2];
+            document.getElementById('tit').textContent=com;
+            const response = await fetch('http://localhost:3000/filmes');
+            const data = await response.json();
+            console.log('Dados carregados com sucesso:', data);
+            data.forEach(async filme => {
+                if(filme._id == com){
+                    document.getElementById('tit').textContent = filme.title;
+                    document.getElementById('ano').textContent = filme.year;
+                    
+                    // Obtém o nome dos atores
+                    const castNames = await Promise.all(filme.cast.map(async actor => {
+                        const actorResponse = await fetch(`http://localhost:3000/atores/${actor}`);
+                        const actorData = await actorResponse.json();
+                        return `<a href="http://localhost:7777/atores/${actor}">${actorData.nome}</a>`;
+                    }));
+                    document.getElementById('cast').innerHTML = castNames.join(', ');
+
+                    // Obtém o nome dos gêneros
+                    const genreNames = await Promise.all(filme.genres.map(async genre => {
+                        const genreResponse = await fetch(`http://localhost:3000/generos/${genre}`);
+                        const genreData = await genreResponse.json();
+                        return `<a href="http://localhost:7777/generos/${genre}">${genreData.nome}</a>`;
+                    }));
+                    document.getElementById('genre').innerHTML = genreNames.join(', ');
+                    
+                    // Atualiza o título da página
+                    document.title = filme.title;
+                }
+            });
+        } catch (error) {
+            console.error('Erro ao carregar dados:', error);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', carregarFilmes);
+</script>
+
+</body>
+</html>
+
