@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  .container
+    h1 Apagar Compositor #{compositor.nome}
+    
+    form.w3-compositor-form(method="post")
+      // Campo de entrada oculto para armazenar o ID
+      input(type="hidden" name="id")
+      br
+      button.w3-btn.w3-purple.w3-mb-2(type="submit") Salvar Alterações
+
+    p.w3-margin-top
+      a(href="http://localhost:7777/compositores", class="saida") Voltar ao Menu Compositores

@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  .container
+    header.w3-container.w3-teal
+      h1 Periodo #{periodo.nome}
+    .w3-container
+      ul.w3-ul.w3-card-4(style="width:50%")
+        li
+          b Descricao: #{periodo.descricao}
+    // Outras informações do período aqui
+    a(href="http://localhost:7777/periodos" class="saida") Voltar ao Menu Período

@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  .container
+    h1 Apagar Periodo #{periodo.nome}
+    
+    form.w3-periodo-form(method="post")
+      // Campo de entrada oculto para armazenar o ID
+      input(type="hidden" name="id")
+      br
+      button.w3-btn.w3-purple.w3-mb-2(type="submit") Salvar Alterações
+
+    p.w3-margin-top
+      a(href="http://localhost:7777/periodoes", class="saida") Voltar ao Menu periodoes
