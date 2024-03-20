@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  .container
+    h1 Editar periodo #{periodo.nome}
+    
+    form.w3-periodo-form(method="post")
+      fieldset 
+        // Adiciona um campo oculto para enviar o ID
+        input(type="hidden" name="id" ) 
+        
+        label(for="nome") Nome:
+        input(type="text" name="nome" value=periodo.nome)
+        br 
+        
+        label(for="descricao") Descricao:
+        input(type="text" name="descricao" value=periodo.descricao)
+        br
+        
+      button.w3-btn.w3-purple.w3-mb-2(type="submit") Salvar Alterações
+
+    p.w3-margin-top
+      a(href="http://localhost:7777/periodos", class="saida") Voltar ao Menu periodos
